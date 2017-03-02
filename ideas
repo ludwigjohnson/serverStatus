@@ -1,0 +1,51 @@
+#gets the cpu usage
+  top -bn2 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}'
+#output
+  0.2%
+  0%
+  
+#alt. output
+  0.2%
+  50.1%
+
+#gets ram usage
+  free -h | grep Mem | awk '{print "Total: "$2"\nUsed "$2-$4"G\nFree "$4}'
+#output
+  Total: 3.9G
+  Used 0.8G
+  Free 3.1G
+
+
+#network usage
+#Total recieved/day
+#Total sent/day
+#Total (sent/recieved)/day
+#Top speed/day
+#Use vnstat --help
+
+#daily stats
+        #recieved/day
+        vnstat -d | grep 02/13/2017 | awk '{print $2" "$3}'
+        #output
+        <
+        1.12 MiB
+        >
+        #transmitted/day
+        vnstat -d | grep 02/13/2017 | awk '{print $5" "$6}'
+        #output
+        <
+        577 KiB
+        >
+        #total/day
+        vnstat -d | grep 02/13/2017 | awk '{print $8" "$9}'
+        #output
+        <
+        1.69 MiB
+        >
+
+#get day stuff from current day
+      day           rx              tx          total           avg. rate
+     02/15/2017    29.16 MiB |     401 KiB |   29.55 MiB |    8.16 kbit/s
+vnstat -d | grep 02/15/201
+
+vnstat -d | grep `date +%m/%d/%Y` | awk '{print $8" "$9}'
