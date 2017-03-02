@@ -1,1 +1,30 @@
+#!/usr/bin/env bash
 
+#Get hdd info (hourly)
+#Dependency: smartmontools
+#Store values in files (~/serverStatus/hdd.list & ~/serverStatus/smart.val)
+##Files above should be created before script runs
+#Files paths
+HDDLIST='/tmp/serverStatus/hdd.list'
+SMARTFILE='/tmp/serverStatus/smart.val'
+
+#HDD_NAME(mount point, SerialNumber)
+#HDD_SPACE(FREE/TOTAL)
+#HDD_TEMP(MAX/MIN/AVG)
+#HDD_SMART(On_hours, SMART selftest, Remaining%)
+
+#Reset smart.val file with current hour
+date +%H > $SMARTFILE
+
+#write mountpoints to hdd.list
+sudo smartctl --scan | awk '{print $1}' > $HDDLIST
+
+#Loop through all HDDs
+while read HDD
+do
+	##HDD_NAME
+	mountPoint=$HDD
+	serialNumber=$(sudo smartctl --info $HDD | grep -e 'Serial Number' | awk '{print $3}')
+	
+
+done < $HDDLIST
