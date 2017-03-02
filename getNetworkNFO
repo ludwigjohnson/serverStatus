@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+#Get network info (daily)
+#Dependency: vnStat 1.14
+
+netDate=$(date +%m/%d/%Y)
+
+rxDay=$(vnstat -d | grep $netDate | awk '{print $2" "$3}')
+echo $rxDay
+
+txDay=$(vnstat -d | grep $netDate | awk '{print $5" "$6}')
+echo $txDay
+
+ttDay=$(vnstat -d | grep $netDate | awk '{print $8" "$9}')
+echo $ttDay
