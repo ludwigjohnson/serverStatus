@@ -8,6 +8,12 @@
 HDDLIST='/tmp/serverStatus/hdd.list'
 SMARTFILE='/tmp/serverStatus/smart.val'
 
+#Check if temp folder exists, else create it
+DIREC='/tmp/serverStatus'
+if [ ! -d "$DIREC" ]; then
+	mkdir /tmp/serverStatus
+fi
+
 #HDD_NAME(mount point, SerialNumber)
 #HDD_SPACE(FREE/TOTAL)
 #HDD_TEMP(MAX/MIN/AVG)
