@@ -3,7 +3,6 @@
 #Get hdd info (hourly)
 #Dependency: smartmontools
 #Store values in files (~/serverStatus/hdd.list & ~/serverStatus/smart.val)
-##Files above should be created before script runs
 #Files paths
 HDDLIST='/tmp/serverStatus/hdd.list'
 SMARTFILE='/tmp/serverStatus/smart.val'
