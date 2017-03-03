@@ -1,1 +1,20 @@
+#!/usr/bin/env bash
 
+#Get hdd temperature (every 5 minutes)
+#Dependency: smartmontools
+#Store values in files (/tmp/serverStatus/hdd.list & /tmp/serverStatus/smart.val)
+#File paths
+TEMPERATUREfile='/tmp/serverStatus/temperature.val'
+
+#Check if temp folder exists, else create it
+DIREC='/tmp/serverStatus'
+if [ ! -d "$DIREC" ]; then
+	mkdir /tmp/serverStatus
+fi
+
+#write hour for checking in another script
+#write temperature every minute to file
+
+tempVar=$(sudo smartctl -A $HDD | grep Temperature | cut -d: -f3 | awk '{print $10}')
+h=$(date +%H)
+echo "hour:"$h >> $TEMPERATUREfile
