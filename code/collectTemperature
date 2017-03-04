@@ -5,16 +5,50 @@
 #Store values in files (/tmp/serverStatus/hdd.list & /tmp/serverStatus/smart.val)
 #File paths
 TEMPERATUREfile='/tmp/serverStatus/temperature.val'
+HDDLIST='/tmp/serverStatus/hdd.list'
+DIREC='/tmp/serverStatus'
+
+#currentHour
+h=$(date +%H)
+#currentMinute
+M=$(date +%M)
 
 #Check if temp folder exists, else create it
-DIREC='/tmp/serverStatus'
 if [ ! -d "$DIREC" ]; then
 	mkdir /tmp/serverStatus
 fi
+#check if $TEMPERATUREfile exists or has to be created
+if [ ! -e "$TEMPERATUREfile" ]; then
+	echo $h > $TEMPERATUREfile
+else
+	fileHour=$(head -n 1 $TEMPERATUREfile)
+fi
+
+#Print filesystems to file
+sudo smartctl --scan | awk '{print $1}' > $HDDLIST
+
+
 
 #write hour for checking in another script
 #write temperature every minute to file
+#overwrite $TEMPERATUREfile when loading values in other getHddNFO script
+#Loop through HDDs in $HDDLIST
+while read HDD
+do
+	if [ $fileHour == $h ]; then
+		tempVar=$(sudo smartctl -A $HDD | grep Temperature | cut -d: -f3 | awk '{print $10}')
+		echo $HDD " " $tempVar >> $TEMPERATUREfile
+		#put this ($ echo $h > $TEMPERATUREfile) in the getHddNFO script
+	elif [ $M > 5 ]; then
+		echo $h > $TEMPERATUREfile
+	fi
+done < $HDDLIST
 
-tempVar=$(sudo smartctl -A $HDD | grep Temperature | cut -d: -f3 | awk '{print $10}')
-h=$(date +%H)
-echo "hour:"$h >> $TEMPERATUREfile
+
+##output:
+#hour
+#fileSystem TEMPERATURE
+#23
+#/dev/sda 34
+
+##get commad $ cat $TEMPERATUREfile | grep $HDD | awk '{print $2}'
